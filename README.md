@@ -31,8 +31,8 @@ system design. Every component maps to a real skill used in AI engineering roles
 │         (natural language question or           │
 │          scheduled SMS summary)                 │
 └─────────────────┬───────────────────────────────┘
-│
-▼
+                  │
+                  ▼
 ┌─────────────────────────────────────────────────┐
 │            Orchestrator Agent                   │
 │   Routes questions to the right sub-agent,      │
