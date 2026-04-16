@@ -26,43 +26,32 @@ system design. Every component maps to a real skill used in AI engineering roles
 ---
 
 ## 🏗️ Architecture
-┌─────────────────────────────────────────────────┐
-│                  User / Phone                   │
-│         (natural language question or           │
-│          scheduled SMS summary)                 │
-└─────────────────┬───────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────┐
-│            Orchestrator Agent                   │
-│   Routes questions to the right sub-agent,      │
-│   synthesizes responses, manages context        │
-└────┬──────────────┬──────────────┬──────────────┘
-│              │              │
-▼              ▼              ▼
-┌─────────┐  ┌─────────────┐  ┌──────────────┐
-│Nutrition│  │   Planner   │  │  Suggestion  │
-│  Agent  │  │    Agent    │  │    Agent     │
-└────┬────┘  └──────┬──────┘  └──────┬───────┘
-│              │                │
-└──────────────┼────────────────┘
+User / Phone
+(natural language question or scheduled SMS summary)
 │
 ▼
-┌─────────────────────────────────────────────────┐
-│              Custom MCP Server                  │
-│   Exposes OurKitchen Firebase data as tools     │
-│   Claude can call (meals, planner, prefs)       │
-└─────────────────┬───────────────────────────────┘
+Orchestrator Agent
+Routes questions to the right sub-agent,
+synthesizes responses, manages context
 │
-┌───────┴────────┐
-▼                ▼
-┌──────────────────┐  ┌────────────────────────┐
-│ Firebase         │  │ ChromaDB Vector Store  │
-│ Firestore        │  │ (meal history + prefs  │
-│ (live data)      │  │  as embeddings for RAG)│
-└──────────────────┘  └────────────────────────┘
+┌────┴────┬──────────────┐
+▼         ▼              ▼
+Nutrition  Planner      Suggestion
+Agent      Agent         Agent
+│         │              │
+└────┬────┘──────────────┘
+│
+▼
+Custom MCP Server
+Exposes OurKitchen Firebase data as tools
+Claude can call (meals, planner, prefs)
+│
+┌────┴────────────────────┐
+▼                         ▼
+Firebase Firestore       ChromaDB Vector Store
+(live data)              (meal history + prefs
+as embeddings for RAG)
 
----
 
 ## 🧩 AI Concepts Demonstrated
 
