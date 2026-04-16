@@ -26,31 +26,19 @@ system design. Every component maps to a real skill used in AI engineering roles
 ---
 
 ## 🏗️ Architecture
-User / Phone
-(natural language question or scheduled SMS summary)
-│
-▼
-Orchestrator Agent
-Routes questions to the right sub-agent,
-synthesizes responses, manages context
-│
-┌────┴────┬──────────────┐
-▼         ▼              ▼
-Nutrition  Planner      Suggestion
-Agent      Agent         Agent
-│         │              │
-└────┬────┘──────────────┘
-│
-▼
-Custom MCP Server
-Exposes OurKitchen Firebase data as tools
-Claude can call (meals, planner, prefs)
-│
-┌────┴────────────────────┐
-▼                         ▼
-Firebase Firestore       ChromaDB Vector Store
-(live data)              (meal history + prefs
-as embeddings for RAG)
+
+```mermaid
+flowchart TD
+    A[👤 User / Phone] -->|natural language question or scheduled SMS| B[🧠 Orchestrator Agent\nRoutes questions, synthesizes responses]
+    B --> C[🥗 Nutrition Agent]
+    B --> D[📅 Planner Agent]
+    B --> E[💡 Suggestion Agent]
+    C --> F[🔌 Custom MCP Server\nExposes OurKitchen Firebase as tools]
+    D --> F
+    E --> F
+    F --> G[(🔥 Firebase Firestore\nlive data)]
+    F --> H[(🗄️ ChromaDB\nmeal embeddings for RAG)]
+```
 
 ---
 
@@ -80,21 +68,24 @@ as embeddings for RAG)
 ---
 
 ## 🗂️ Project Structure
+
+```
 ourbrain/
 ├── notebooks/
-│   ├── 01_firestore_connection.ipynb     # Connect to OurKitchen Firebase
-│   ├── 02_mcp_server.ipynb               # Build and test MCP server
-│   ├── 03_rag_pipeline.ipynb             # Embed meal data, test retrieval
-│   ├── 04_agents.ipynb                   # Orchestrator + sub-agents
-│   ├── 05_evals.ipynb                    # Eval framework and test cases
-│   └── 06_scheduled_summary.ipynb        # Weekly summary + SMS delivery
+│   ├── 01_firestore_connection.ipynb
+│   ├── 02_mcp_server.ipynb
+│   ├── 03_rag_pipeline.ipynb
+│   ├── 04_agents.ipynb
+│   ├── 05_evals.ipynb
+│   └── 06_scheduled_summary.ipynb
 ├── src/
-│   ├── mcp_server.py                     # Production MCP server
-│   ├── agents.py                         # Orchestrator + sub-agent logic
-│   ├── rag.py                            # Embedding + retrieval pipeline
-│   └── evals.py                          # Eval suite
+│   ├── mcp_server.py
+│   ├── agents.py
+│   ├── rag.py
+│   └── evals.py
 ├── README.md
 └── requirements.txt
+```
 
 ---
 
