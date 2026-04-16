@@ -52,6 +52,7 @@ Firebase Firestore       ChromaDB Vector Store
 (live data)              (meal history + prefs
 as embeddings for RAG)
 
+---
 
 ## 🧩 AI Concepts Demonstrated
 
