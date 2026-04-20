@@ -1,5 +1,19 @@
+# Credentials - never commit these
 credentials/
+
+# Virtual environment
+.venv/
+
+# Environment variables
 .env
+
+# Python
 __pycache__/
-.ipynb_checkpoints/
 *.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Mac
+.DS_Store
