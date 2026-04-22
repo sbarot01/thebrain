@@ -17,3 +17,6 @@ __pycache__/
 
 # Mac
 .DS_Store
+
+#Keys (Voyage)
+secrets.json
