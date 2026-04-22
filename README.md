@@ -1,25 +1,27 @@
 # 🧠 thebrain
 > A personal AI intelligence layer built with multi-agent orchestration, RAG, and MCP servers on top of household app data
 
-TheBrain connects to my real household data — meals, nutrition, weekly plans — 
+TheBrain connects to the suite of household apps I built for my family — meal planning, fitness tracking -
 and answers questions across all of it using multi-agent orchestration, RAG, 
 custom MCP servers, and proactive scheduled summaries.
 
-This is a portfolio project built to demonstrate production-level agentic AI 
-system design. Every component maps to a real skill used in AI engineering roles.
+I built TheBrain as a portfolio project to demonstrate agentic AI system design, and to begin exploring AI Product roles. 
+I currently work in Advisory at KPMG (Capital Markets / Financial Services Operations). 
+I have no formal software engineering background — I taught myself and shipped 
+the household apps first, then built an Agentic layer on top of them.
 
 ---
 
 ## 🎯 What It Does
 
-**Ask questions across your household data in natural language**
+**Natural Language Q&A**
 > "What have we been cooking most this month? Are we hitting our protein goals?"
 
-**Get proactive weekly summaries pushed to your phone**
+**Proactive weekly summaries pushed to our phones**
 > Every Sunday, OurBrain sends a digest of nutrition patterns, meal variety, 
 > and personalized suggestions for the week ahead.
 
-**Receive coaching based on your actual patterns**
+**Pattern-based Coaching**
 > "You haven't cooked a high-protein meal in 5 days — here's a suggestion 
 > based on your preferences and what's already in your weekly planner."
 
@@ -59,10 +61,11 @@ flowchart TD
 
 - **Language:** Python
 - **LLM:** Anthropic Claude API (`claude-sonnet-4-6`)
-- **Data Source:** Firebase Firestore (OurKitchen app)
+- **Embeddings:** Voyage AI (`voyage-2`)
+- **Data Source:** Firebase Firestore (OurKitchen app - live household data)
 - **Vector Store:** ChromaDB
-- **Delivery:** Twilio SMS / OpenClaw
-- **Development:** Jupyter Notebooks → Python modules
+- **Delivery:** Twilio SMS
+- **Dev Environment:** Jupyter Notebooks
 - **Version Control:** GitHub
 
 ---
@@ -70,19 +73,20 @@ flowchart TD
 ## 🗂️ Project Structure
 
 ```
-ourbrain/
+TheBrain/
 ├── notebooks/
-│   ├── 01_firestore_connection.ipynb
-│   ├── 02_mcp_server.ipynb
-│   ├── 03_rag_pipeline.ipynb
-│   ├── 04_agents.ipynb
-│   ├── 05_evals.ipynb
-│   └── 06_scheduled_summary.ipynb
-├── src/
-│   ├── mcp_server.py
-│   ├── agents.py
-│   ├── rag.py
-│   └── evals.py
+│   ├── 01_firebase_connection.ipynb   ✅ Phase 1
+│   ├── 02_mcp_server.ipynb            ✅ Phase 2
+│   ├── 3a_rag_embed.ipynb             ✅ Phase 3
+│   ├── 3b_rag_retrieval.ipynb         ✅ Phase 3
+│   ├── 04_agents.ipynb                🔜 Phase 4
+│   ├── 05_evals.ipynb                 🔜 Phase 5
+│   └── 06_scheduled_summary.ipynb     🔜 Phase 6
+├── mcp_server/
+│   └── ourbrain_server.py
+├── credentials/                       # gitignored
+├── secrets.json                       # gitignored
+├── .env.example
 ├── README.md
 └── requirements.txt
 ```
@@ -91,21 +95,23 @@ ourbrain/
 
 ## 🗺️ Build Roadmap
 
-- [ ] **Phase 1 — Data Foundation**
-  - [ ] Connect to OurKitchen Firestore from Python
-  - [ ] Explore and document data structure
-  - [ ] Build basic Q&A over raw data
+- ✅ **Phase 1 — Data Foundation**
+  - ✅ Connected to live Firestore data from Python across meals, weekly planner history, and household preferences.
+  - ✅ Set up credential and secrets management used across all notebooks.
+  - ✅ Build basic Q&A over raw data
 
-- [ ] **Phase 2 — MCP Server**
-  - [ ] Define tools: `get_meals`, `get_weekly_history`, `get_preferences`
-  - [ ] Build and test MCP server locally
-  - [ ] Verify Claude can call tools and reason over results
+- ✅ **Phase 2 — MCP Server**
+  - ✅ Define tools: `get_meals`, `get_weekly_history`, `get_preferences`
+  - ✅ Built a custom Python MCP server that exposes OurKitchen's Firestore data as tools Claude can call on demand
+  - ✅ Verify Claude can call tools and reason over results
 
-- [ ] **Phase 3 — RAG Pipeline**
-  - [ ] Embed meal history into ChromaDB
-  - [ ] Test semantic retrieval ("find high protein meals we've made")
-  - [ ] Wire RAG results into agent context
+- ✅ **Phase 3 — RAG Pipeline:** RAG was implemented alongside tools from Phase 2 to answer qualitative questions from my family - i.e., what meal can we make that is light and fresh
+  - ✅ Embedded meal history into ChromaDB using Voyage AI and built a semantic retrieval layer that feeds into Claude's context.
+  - ✅ Test semantic retrieval ("what are some meals that are comfort food on a cold night")
+  - ✅ Wire RAG results into agent context
 
+**Key Takeaway** - Retrieval is only as good as the data chunks — meals with descriptive notes return better results than meals with structured fields only. Something to improve as the dataset grows
+    
 - [ ] **Phase 4 — Multi-Agent Orchestration**
   - [ ] Build Nutrition Agent
   - [ ] Build Planner Agent
@@ -134,6 +140,7 @@ This project is part of a personal household app ecosystem:
 
 ## 👤 About
 
-Built by Sagar — exploring agentic AI system design as a pathway into AI Product 
-roles. Background in [your current field], self-taught builder, shipped multiple 
-household apps before this project.
+Built by Sagar — exploring agentic AI system design as a pathway into AI Product roles. 
+- Background in Electrical Engineering and currently in advisory at KPMG
+- Self-taught builder
+- Shipped multiple household apps before this project.
