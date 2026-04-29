@@ -20,3 +20,7 @@ __pycache__/
 
 #Keys (Voyage)
 secrets.json
+
+# Vector stores (regenerable from source data)
+ourbrain_chroma/
+*.chroma/
