@@ -84,6 +84,11 @@ TheBrain/
 │   └── 06_scheduled_summary.ipynb     🔜 Phase 6
 ├── mcp_server/
 │   └── ourbrain_server.py
+├── agents/                            # Phase 4 - multi-agent layer
+│   ├── __init__.py            
+│   ├── mcp_host.py                    # custom MCP host
+│   ├── agent_runner.py                # the agent loop
+│   ├── sub_agents.py.                 # Nutrition / Planner / Suggestion'
 ├── credentials/                       # gitignored
 ├── secrets.json                       # gitignored
 ├── .env.example
@@ -117,6 +122,8 @@ TheBrain/
   - [ ] Build Planner Agent
   - [ ] Build Suggestion Agent
   - [ ] Build Orchestrator that routes and synthesizes
+
+**Key Takeaway** - The Suggestion Agent initially reframed dietary restrictions ("no pork") as "underutilized proteins" and recommended pork dishes despite acknowledging the restriction. Fixed via explicit hard-rule guardrails in the system prompt that listed variants of restricted ingredients and forbid rationalizing exceptions. A production-grade fix would add post-response validation as a second layer (planned for the Evals phase).
 
 - [ ] **Phase 5 — Evals**
   - [ ] Define 20 test questions with expected answers
