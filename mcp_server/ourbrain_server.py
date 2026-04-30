@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import os
 import json
 from mcp.server.fastmcp import FastMCP
+import voyageai
+import chromadb
+
 
 # Load environment variables
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
@@ -16,6 +19,19 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+# ── Voyage AI for embedding queries ────────────────────────────────
+# We load the key from the same secrets.json the rest of the project uses.
+SECRETS_PATH = "/Users/sagar/dev/TheBrain/secrets.json"
+with open(SECRETS_PATH) as f:
+    _secrets = json.load(f)
+voyage_client = voyageai.Client(api_key=_secrets["VOYAGE_API_KEY"])
+
+# ── ChromaDB for semantic meal search ──────────────────────────────
+# Connects to the existing index built in Phase 3.
+CHROMA_PATH = "/Users/sagar/dev/TheBrain/notebooks/ourbrain_chroma"
+chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
+meals_collection = chroma_client.get_collection("meals")
 
 # Initialize MCP server
 mcp = FastMCP("OurBrain")
@@ -93,6 +109,46 @@ def get_groceries() -> str:
         item['id'] = doc.id
         items.append(item)
     return json.dumps(items, default=str)
+
+# ── Tool 5: Semantic meal search ───────────────────────────────────
+@mcp.tool()
+def search_meals_semantically(query: str, n_results: int = 3) -> str:
+    """Search meals by semantic similarity for fuzzy/qualitative queries.
+    
+    Use this tool when the user asks about meals using descriptive language
+    that doesn't match exact database fields, such as:
+      - "something light and fresh"
+      - "comfort food for a cold night"
+      - "quick weeknight dinner ideas"
+      - "meals similar to bibimbap" (when bibimbap isn't a structured filter)
+    
+    For exact filters (cuisine='Vietnamese', protein='chicken'), prefer the
+    get_meals tool instead. This tool is best for vibes-based queries where
+    structured filters wouldn't capture the intent.
+    
+    Returns the top n_results most semantically similar meals, with each
+    meal's name, similarity distance (lower = more similar), and the indexed
+    text chunk used for matching.
+    """
+    # Embed the query with the same model used during indexing
+    query_vector = voyage_client.embed([query], model="voyage-2").embeddings[0]
+    
+    # Query ChromaDB
+    results = meals_collection.query(
+        query_embeddings=[query_vector],
+        n_results=n_results
+    )
+    
+    # Reformat into a clean list of dicts (matches the Phase 3 helper)
+    meals = []
+    for i in range(len(results["documents"][0])):
+        meals.append({
+            "name": results["metadatas"][0][i].get("name"),
+            "distance": round(results["distances"][0][i], 4),
+            "chunk": results["documents"][0][i]
+        })
+    
+    return json.dumps(meals, default=str)
 
 
 # ── Run the server ─────────────────────────────────────────────────

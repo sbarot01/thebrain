@@ -62,7 +62,7 @@ healthy, say so. If you don't have enough data to answer, say that too.
 {HARD_RULES}
 """
 
-NUTRITION_TOOLS = ["get_meals", "get_meal_history", "get_preferences"]
+NUTRITION_TOOLS = ["get_meals", "get_meal_history", "get_preferences", "search_meals_semantically"]
 
 
 async def run_nutrition_agent(host, anthropic_client, model, user_question, verbose=True):
@@ -97,7 +97,7 @@ Be practical. Plans should be actionable, not aspirational.
 {HARD_RULES}
 """
 
-PLANNER_TOOLS = ["get_meals", "get_meal_history", "get_groceries", "get_preferences"]
+PLANNER_TOOLS = ["get_meals", "get_meal_history", "get_groceries", "get_preferences", "search_meals_semantically"]
 
 
 async def run_planner_agent(host, anthropic_client, model, user_question, verbose=True):
@@ -139,7 +139,7 @@ Be enthusiastic but grounded. You're a knowledgeable friend, not a hype machine.
 {HARD_RULES}
 """
 
-SUGGESTION_TOOLS = ["get_meals", "get_meal_history", "get_preferences"]
+SUGGESTION_TOOLS = ["get_meals", "get_meal_history", "get_preferences", "search_meals_semantically"]
 
 
 async def run_suggestion_agent(host, anthropic_client, model, user_question, verbose=True):
