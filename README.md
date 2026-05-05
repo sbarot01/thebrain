@@ -79,7 +79,7 @@ TheBrain/
 │   ├── 02_mcp_server.ipynb            ✅ Phase 2
 │   ├── 3a_rag_embed.ipynb             ✅ Phase 3
 │   ├── 3b_rag_retrieval.ipynb         ✅ Phase 3
-│   ├── 04_agents.ipynb                🔜 Phase 4
+│   ├── 04_agents.ipynb                ✅ Phase 4
 │   ├── 05_evals.ipynb                 🔜 Phase 5
 │   └── 06_scheduled_summary.ipynb     🔜 Phase 6
 ├── mcp_server/
@@ -89,6 +89,7 @@ TheBrain/
 │   ├── mcp_host.py                    # custom MCP host
 │   ├── agent_runner.py                # the agent loop
 │   ├── sub_agents.py.                 # Nutrition / Planner / Suggestion'
+│   ├── orchestrator.py.               # Orchestrator calls sub-agents-as-tools'
 ├── credentials/                       # gitignored
 ├── secrets.json                       # gitignored
 ├── .env.example
@@ -117,13 +118,13 @@ TheBrain/
 
 **Key Takeaway** - Retrieval is only as good as the data chunks — meals with descriptive notes return better results than meals with structured fields only. Something to improve as the dataset grows
     
-- [ ] **Phase 4 — Multi-Agent Orchestration**
-  - [ ] Build Nutrition Agent
-  - [ ] Build Planner Agent
-  - [ ] Build Suggestion Agent
-  - [ ] Build Orchestrator that routes and synthesizes
+- ✅ **Phase 4 — Multi-Agent Orchestration**
+  - ✅ Build Nutrition Agent
+  - ✅ Build Planner Agent
+  - ✅ Build Suggestion Agent
+  - ✅ Build Orchestrator that routes and synthesizes
 
-**Key Takeaway** - The Suggestion Agent initially reframed dietary restrictions ("no pork") as "underutilized proteins" and recommended pork dishes despite acknowledging the restriction. Fixed via explicit hard-rule guardrails in the system prompt that listed variants of restricted ingredients and forbid rationalizing exceptions. A production-grade fix would add post-response validation as a second layer (planned for the Evals phase).
+**Key Takeaway** - 1) The Suggestion Agent initially reframed dietary restrictions ("no pork") as "underutilized proteins" and recommended pork dishes despite acknowledging the restriction. Fixed via explicit hard-rule guardrails in the system prompt that listed variants of restricted ingredients and forbid rationalizing exceptions. A production-grade fix would add post-response validation as a second layer (planned for the Evals phase). 2) The same agentic loop pattern works at both layers — sub-agents call MCP tools, the orchestrator calls sub-agents-as-tools. 3) Hybrid retrieval (structured queries + semantic search exposed as tools) lets the agent choose dynamically based on question type. Tool descriptions are the prompt-engineering surface that drives this choice.
 
 - [ ] **Phase 5 — Evals**
   - [ ] Define 20 test questions with expected answers
